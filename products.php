@@ -160,7 +160,7 @@ $x=0;
 while ($list = mysql_fetch_assoc($result)) {
    // echo data
    $x++; 
-   echo "<td>" . $list['sku'] . "<br>" . $list['description'] . "</td>";
+   echo "<td><img src=images/unavailable.png><br>" . $list['sku'] . "<br>" . $list['description'] . "</td>";
 	
 	if ($x == 4) {
 				$x=0;
