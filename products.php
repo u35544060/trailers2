@@ -1,9 +1,57 @@
+<!DOCTYPE html>
 
+<?php 
 
+require 'scripts/php/dbConnect.php';
 
+$pageSetup = "SELECT NULL FROM products";
+                    $pagination = $con->prepare($pageSetup);
+                    $pagination->execute();
+                    $count = $pagination->rowCount();
+                
+                    if (!empty(GET['page'])) {
+                        $page = (int)$_GET['page'];
+                    } else {
+                        $page = 1;
+                    }
+                
+                if (!empty($_GET['per'])) {
+                    $per = (int)$_GET['per'];
+                } else {
+                    $per = 150;
+                }
+                
+                $lastPage = ceil($count / $per);
+                
+                if ($page < 1) {
+                    $page = 1;
+                } elseif ($page > $lastPage) {
+                    $page = $lastPage;
+                }
+                
+                $lNext = "";
+                $lPrev = "";
+                
+                if($lastPage !=1) {
+                    if($page != $lastPage) {
+                        $next = $page + 1;
+                        $lNext = '<a href="products.php?page='.$next.'&per='.$per.'"><span>></span></a>';
+                    }
+                    
+                    if ($page != 1) {
+                        $prev = $page - 1;
+                        $lPrev = '<a href="products.php?page='.$prev.'&per='.$per.'"><span><</span></a>';
+                    }
+                }
+                
+                $startPaging = ($page > 1) ? ($page * $per) - $per : 0;
+                
+                $productSQL = "SELECT * FROM products LIMIT {$startPaging}";
+                $getProds = $con->prepare($productSQL);
+                $getProds->execute();
+                $prods = $getProds->fetchAll(PDO::FETCH_ASSOC);
 
-
-
+?>
 
 <html lang="en">
 
@@ -23,23 +71,6 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         <link rel="stylesheet" type="text/css" href="css/main.css">
-		<?php
-
-
-$db = mysql_connect("db742173504.db.1and1.com", "dbo742173504", "C0mm0nP@rt5") or die(mysql_error());
-
-mysql_select_db("db742173504", $db);
-if (mysql_errno()) {
-    die('<p>Failed to connect to MySQL: '.mysql_error().'</p>');
-} else {
-    echo '<p>Connection to MySQL server successfully established.</p >';
-}
-
-$query = "select * from cwtp-catalog";
-
-$result = mysql_query($query);
-
-?>
     </head>
     <body>
         <!-- create the naviagation for the page -->
@@ -81,24 +112,41 @@ $result = mysql_query($query);
         
         </div><!-- end filler -->
         
-        <!-- create the main content for the homepage here -->
-        
-        <div class="jumbotron">
-            <?php 
-			echo $query ;
-			echo $result ;
-			echo "<table>
-			<tr><td>CATAGORY</td><td>BRAND</td><td>DISTRIBUTOR</td><td>SKU</td><td>DESCRIPTION</td><td>PRICE</td></tr>";
-			  
-			 while ($row = mysql_fetch_array($result))
-									 {
-										 echo "<tr><td>" . $row['catag'] . "</td><td>" . $row['brand'] . "</td><td>" . $row['distrib'] . "</td><td>" . $row['SKU'] . "</td><td>" . $row['description'] . "</td><td>" . $row['price'] . "</td></tr>";
-									 }
-									 mysql_close($db);
-
-			?>
-			</table>
-        </div>
+        <div class="container-fluid">
+            <div class="row">
+               <div class="col-md-2">
+                test
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="container">
+                            <?php echo $lPrev;
+                            for($i=1; $i <= $lastPage; $i++) : ?>
+                            <a href="products.php?page=<?php echo $i ?>&per=<?php echo $per; ?>"><?php echo $i ?></a>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 offset-md-1">
+                        test
+                        </div>
+                        <div class="col-md-2">
+                        test
+                        </div>
+                        <div class="col-md-2">
+                        test
+                        </div>
+                        <div class="col-md-2">
+                        test
+                        </div>
+                        <div class="col-md-2">
+                        test
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+    
         
         <div id="footer">
             <div class="container-fluid">
