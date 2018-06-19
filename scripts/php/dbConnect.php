@@ -1,9 +1,9 @@
 <?php
 
-$host = 'localhost';
-$uname = 'trailers';
-$pass = 'omNS2EsqbWYGtexl';
-$db = 'trailers';
+$host_name = 'db742173504.db.1and1.com';
+$uname = 'dbo742173504';
+$pass = 'C0mm0nP@rt5';
+$db = 'db742173504';
 $char = 'utf8';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$char";
