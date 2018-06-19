@@ -1,0 +1,19 @@
+h3 {
+    color: #4d5a60;
+    margin-top: 20px;
+}
+
+.filler {
+    padding: 10px 0;
+}
+
+.dropdown-menu {
+    width: 50px !important;
+    min-width: 50px !important;
+}
+
+.dropdown-item {
+    padding: 0 !important;
+    text-align: center;
+}
+
