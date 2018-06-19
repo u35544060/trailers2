@@ -1,6 +1,6 @@
 <?php
 
-$host_name = 'db742173504.db.1and1.com';
+$host = 'db742173504.db.1and1.com';
 $uname = 'dbo742173504';
 $pass = 'C0mm0nP@rt5';
 $db = 'db742173504';
