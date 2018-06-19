@@ -1,0 +1,124 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+}
+
+.noPad {
+    padding: 0;
+    margin: 0;
+}
+
+.orangeP {
+    color: #f26722;
+    font-weight: 500;
+}
+
+.bigMargTop {
+    margin-top: 60px;
+}
+
+.overflow {
+    margin-right: 0;
+    padding-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.underline {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 100px;
+    background-color: #f26722;
+    height: 2px;
+    margin-top: -5px;
+}
+
+.underline2 {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 220px;
+    background-color: #f26722;
+    height: 2px;
+    margin-top: -5px;
+}
+
+.underline3 {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 140px;
+    background-color: #f26722;
+    height: 2px;
+    margin-top: -5px;
+}
+
+.filler {
+    height: 40px;
+    background-image: 
+        linear-gradient(
+          to right,
+          #4d5a60 75%,
+          #f26722 5%,
+          #4d5a60 20%  
+    );
+}
+
+.active a{
+    background-color: #f26722 !important;
+    color: white !important;
+}
+
+.nav-tabs .nav-link{
+    border: solid 1px #d9dde0;
+    margin-right: 2px;
+    background-color:  #d9dde0;
+    border-radius:  0;
+}
+
+.dropdown-toggle  {
+    background-color: #d9dde0 !important;
+}
+
+.dropdown-menu {
+    background-color: #f26722;
+}
+
+.dropdown-divider {
+    color: black !important;
+}
+
+.headerPhone h6 {
+    color: #212121 !important;
+}
+
+.headerPhone a {
+    color: #f26722;
+}
+
+#footer {
+   background-color: #4d5a60;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: white;
+}
+
+#footer a p {
+    margin: 0;
+    padding: 0;
+}
+
+#footer a {
+    color: white;
+}
+
+#footer ul {
+    list-style-type: none;
+}

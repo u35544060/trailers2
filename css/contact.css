@@ -1,0 +1,80 @@
+body {
+    color: #212121 !important;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #212121;
+}
+
+a:hover {
+    color: #f26722;
+}
+
+#map {
+    margin: auto;
+    width: 90%;
+    height: 400px;
+}
+
+table {
+    margin: auto;
+    width: 80%;
+}
+
+form {
+    padding: 0;
+    text-align: center;
+    margin: auto;
+    width: 90%;
+    border: solid #d9dde0 2px;
+    display: block;
+    box-shadow: 0 0 10px #d9dde0;
+}
+
+label {
+    text-align: left !important;
+    width: 90%;
+    font-weight: 700;
+}
+
+input[type="text"] {
+    width: 90%;
+    margin: auto;
+    border: solid 2px #f26722;
+    padding-left: 5px;
+    font-size: 1.6em;
+}
+
+input[type="email"] {
+    width: 90%;
+    margin: auto;
+    border: solid 2px #f26722;
+    padding-left: 5px;
+    font-size: 1.6em;
+}
+
+textarea {
+    width: 90%;
+    height: 200px;
+    border: solid 2px #f26722;
+}
+
+.captcha {
+    text-align: center;
+}
+
+.g-recaptcha {
+    display: inline-block;
+}
+
+input[type="submit"] {
+    padding: 10px 30px;
+    font-weight: 500;
+    color: white;
+    background-color: #f26722;
+}

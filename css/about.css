@@ -1,0 +1,24 @@
+.jumbotron {
+    font-family: 'Montserrat', sans-serif !important;
+    padding-bottom: 60px;
+}
+
+.jumbotron h2 {
+    margin-top: 40px;
+    font-weight: 500 !important;
+    color: #212121;
+}
+
+.jumbotron h3 {
+    margin-top: 40px;
+    color: #f26722;
+    font-weight: 300;
+}
+
+.jumbotron p {
+    margin-top: 20px;
+}
+
+.jumbotron a {
+    color: black;
+}
