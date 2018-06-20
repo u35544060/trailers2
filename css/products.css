@@ -1,5 +1,4 @@
 h3 {
-    color: #4d5a60;
     margin-top: 20px;
 }
 
@@ -7,13 +6,64 @@ h3 {
     padding: 10px 0;
 }
 
-.dropdown-menu {
+.ddDark {
+    color: #4d5a60;
+    font-weight: 600;
+}
+
+#smallMenu{
     width: 50px !important;
     min-width: 50px !important;
 }
 
-.dropdown-item {
+.smallItem {
     padding: 0 !important;
     text-align: center;
+    color: white;
 }
+
+.stock {
+    border: solid 1px #4d5a60;
+    background-color: #4d5a60;
+    color: white;
+    position: absolute;
+    top: 4px;
+    padding: 5px;
+}
+
+.tiles {
+    margin: 0;
+    padding: 0;
+}
+
+.btnCart {
+    background-color: #f26722;
+    border: solid 2px #f26722;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    box-shadow: 0 0 5px #4d5a60;
+    color: white;
+    font-weight: 600;
+}
+
+.page-item a {
+    color: #4d5a60;
+}
+
+.btnPageWords  a{
+    color: white;
+    background-color: #4d5a60;
+}
+
+.btnPageSym  a {
+    background-color: #f26722;
+    color: white;
+}
+
+.active {
+    background-color: #f26722;
+    color: white !important;
+}
+
+
 

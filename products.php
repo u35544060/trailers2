@@ -1,5 +1,54 @@
 <!DOCTYPE html>
 
+<?php 
+
+require 'scripts/php/dbConnect.php';
+
+//find out how many rows are in the table
+$countSQL = 'SELECT NULL FROM products';
+$countProds = $con->prepare($countSQL);
+$countProds->execute();
+$numrows = $countProds->rowCount();
+
+//set the number of rows to show per page
+if(isset($_GET['per']) && !empty($_GET['per'])) {
+    $per = $_GET['per'];
+} else {
+    $per = 60;
+}
+
+$rowsperpage = $per;
+//find out total pages
+$totalpages = ceil($numrows / $rowsperpage);
+
+//get the current page or set a default
+if (isset($_GET['currentpage']) && is_numeric($_GET['currentpage'])) {
+    //cast var as int
+    $currentpage = (int) $_GET['currentpage'];
+} else {
+    //default page num
+    $currentpage = 1;
+}
+
+//if current page is greater than total pages...
+if ($currentpage > $totalpages) {
+    //set current page to last page;
+    $currentpage = $totalpages;
+}
+
+//if current page is less than first page...
+if ($currentpage < 1) {
+    $currentpage = 1;
+}
+//the offset of the list, based on current page
+$offset = ($currentpage - 1) * $rowsperpage;
+
+$getProdsSQL = "SELECT sku, inventory, description, pic FROM products LIMIT $offset, $rowsperpage";
+$getProds = $con->prepare($getProdsSQL);
+$getProds->execute();
+$prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
+
+?>
 
 <html lang="en">
 
@@ -7,7 +56,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">          
-        <title>Home - Commonwealth Trailer Parts</title>
+        <title>Products - Commonwealth Trailer Parts</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
@@ -22,6 +71,19 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <link rel="stylesheet" type="text/css" href="css/products.css">
     </head>
+    
+    <style>
+        @media screen and (max-width: 400px) {
+            .stock {
+                left: 21%;
+            }
+            
+            .smallSort {
+                text-align: left !important;
+                margin-top: 10px !important;
+            }
+        }        
+    </style>
     <body>
         <!-- create the naviagation for the page -->
         <nav class="navbar navbar-expand-md navbar-light noPad justify-content-center">
@@ -32,13 +94,13 @@
                 </button>
                 <div class="collapse navbar-collapse align-self-end" id="subMenu">
                     <ul class="navbar-nav nav-tabs">
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="about.html" style="color:#212121;">ABOUT</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html" style="color:#212121">CONTACT</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item active dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="prodDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#212121">PRODUCTS</a>
                             <div class="dropdown-menu" aria-labelledby="prodDrop">
                                 <a class="dropdown-item" href="products.php?type=all">ALL PRODUCTS</a>
@@ -57,13 +119,13 @@
             </div><!-- end container -->
         </nav> <!-- end nav section -->
         
-        <!-- create the bar beneath the nav -->
+        <!-- create the bar beneath the nav and the search bar -->
         <div class="filler vcenter">
-            <div class="row justify-content-end pr-3" style="height: 100%;">
-                <div class="col-md-4 align-self-center input-group">
+            <div class="row justify-content-end p-2 smallSearch" style="height: 100%;">
+                <div class="col-md-4 text-center align-self-center input-group">
                     <input class="form-control" type="search" value="Search" id="inSearch">
                     <span class="input-group-append">
-                        <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                        <button class="btn border-left-0" type="button" style="background-color:#f26722;">
                             <i class="fa fa-search" style="color:white;"></i>
                         </button>
                     </span>
@@ -82,139 +144,145 @@
                 </div>
             </div><!-- end row -->
             <div class="row">
-                <div class=col-md-10 offset-md-1>
-                    <div class="dropdown col-md-4 offset-md-2">
-                        <span class="mr-1">SHOW</span>
-                        <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="ddShow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            60
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="ddShow">
-                            <a class="dropdown-item" href="products.php?page=1&per=60">60</a>
-                            <a class="dropdown-item" href="products.php?page=1&per=120">120</a>
-                            <a class="dropdown-item" href="products.php?page=1&per=180">180</a>
+                <div class="col-sm-8 offset-sm-2">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="dropdown align-self-center">
+                                <span class="mr-1">SHOW</span>
+                                <button class="btn btn-secondary dropdown-toggle btn-sm ddDark" type="button" id="ddShow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    60
+                                </button>
+                                <div class="dropdown-menu" id="smallMenu" aria-labelledby="ddShow">
+                                    <a class="dropdown-item smallItem" href="products.php?page=1&per=60">60</a>
+                                    <a class="dropdown-item smallItem" href="products.php?page=1&per=120">120</a>
+                                    <a class="dropdown-item smallItem" href="products.php?page=1&per=180">180</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10 text-right align-self-center smallSort">
+                            <div class="dropdown">
+                                <span class="mr-1">SORT BY:</span>
+                                <button class="btn btn-secondary dropdown-toggle btn-sm ddDark" type="button" id="ddSort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   A-Z
+                                </button> 
+                                <div class="dropdown-menu" aria-labelledby="ddSort">
+                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=vend">By Vendor</a>
+                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=az">Alphabetically: A to Z</a>
+                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=za">Alphabetically: Z to A</a>
+                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=new">Newest Available</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div><!-- end row -->
+            <div class="row mt-3">
+                <div class="col-md-8 offset-md-2">
+                    <div class="row text-center">
+                        <?php
+                        $it = 0;
+                            foreach($prods as $p) {
+                                $x++;
+                                
+                                if(empty($p['pic'])) {
+                                    $picLoc = 'images/unavailable.png';
+                                } else {
+                                    $picLoc = 'images/thumbs/' . $p['pic'];
+                                }
+
+                                echo '<div class="col-md-3">';
+                                echo '<img class="mb-1 mt-1" src="' . $picLoc . '">';
+                                echo '<p class="tiles">' . $p['sku'] . '</p>';
+                                echo '<p class="tiles">' . $p['description'];
+                                echo '<br>';
+                                if (!empty($p['inventory'])) {
+                                    echo '<h5 class="stock">IN STOCK</h5>';
+                                }
+                                echo '<button class="btn btnCart" type="button">ADD TO CART</button>';
+                                echo '</div>';
+                                
+                                if ($x ==4) {
+                                    $x = 0;
+                                    echo '</div><div class="row text-center">';
+                                }
+                            }
+                        ?>
+                    </div>
+                </div>
+            </div><!-- end row -->
         </div><!-- end container-fluid -->
-    <?php
-// database connection info
-
-$conn = mysql_connect('db742173504.db.1and1.com','dbo742173504','C0mm0nP@rt5') or trigger_error("SQL", E_USER_ERROR);
-$db = mysql_select_db('db742173504',$conn) or trigger_error("SQL", E_USER_ERROR);
-
-// find out how many rows are in the table 
-$sql = "SELECT COUNT(*) FROM products";
-$result = mysql_query($sql, $conn) or trigger_error("SQL", E_USER_ERROR);
-$r = mysql_fetch_row($result);
-$numrows = $r[0];
-
-// number of rows to show per page
-
-if(isset($_GET['per']) && !empty($_GET['per'])){
-    $per = $_GET['per'];
-} else {
-    $per = 60;
-}
-
-
-
-
-
-
-$rowsperpage = $per;
-// find out total pages
-$totalpages = ceil($numrows / $rowsperpage);
-
-// get the current page or set a default
-if (isset($_GET['currentpage']) && is_numeric($_GET['currentpage'])) {
-   // cast var as int
-   $currentpage = (int) $_GET['currentpage'];
-} else {
-   // default page num
-   $currentpage = 1;
-} // end if
-
-// if current page is greater than total pages...
-if ($currentpage > $totalpages) {
-   // set current page to last page
-   $currentpage = $totalpages;
-} // end if
-// if current page is less than first page...
-if ($currentpage < 1) {
-   // set current page to first page
-   $currentpage = 1;
-} // end if
-
-// the offset of the list, based on current page 
-$offset = ($currentpage - 1) * $rowsperpage;
-
-// get the info from the db 
-$sql = "SELECT sku, description FROM products LIMIT $offset, $rowsperpage";
-$result = mysql_query($sql, $conn) or trigger_error("SQL", E_USER_ERROR);
-
-echo "<center><table cellpadding = 5><tr>";
-
-// while there are rows to be fetched...
-$x=0;
-while ($list = mysql_fetch_assoc($result)) {
-   // echo data
-   $x++; 
-   echo "<td><img src=images/unavailable.png><br>" . $list['sku'] . "<br>" . $list['description'] . "</td>";
-	
-	if ($x == 4) {
-				$x=0;
- 				echo "</tr><tr>";
-				}
-}
-   
-     
-   
-   
- // end while
-echo "</tr></table>";
-/******  build the pagination links ******/
-// range of num links to show
-$range = 3;
-
-// if not on page 1, don't show back links
-if ($currentpage > 1) {
-   // show << link to go back to page 1
-   echo " <a href='{$_SERVER['PHP_SELF']}?currentpage=1&per=$per'><<</a> ";
-   // get previous page num
-   $prevpage = $currentpage - 1;
-   // show < link to go back to 1 page
-   echo " <a href='{$_SERVER['PHP_SELF']}?currentpage=$prevpage&per=$per'><</a> ";
-} // end if 
-
-// loop to show links to range of pages around current page
-for ($x = ($currentpage - $range); $x < (($currentpage + $range) + 1); $x++) {
-   // if it's a valid page number...
-   if (($x > 0) && ($x <= $totalpages)) {
-      // if we're on current page...
-      if ($x == $currentpage) {
-         // 'highlight' it but don't make a link
-         echo " [<b>$x</b>] ";
-      // if not current page...
-      } else {
-         // make it a link
-         echo " <a href='{$_SERVER['PHP_SELF']}?currentpage=$x&per=$per'>$x</a> ";
-      } // end else
-   } // end if 
-} // end for
-                 
-// if not on last page, show forward and last page links        
-if ($currentpage != $totalpages) {
-   // get next page
-   $nextpage = $currentpage + 1;
-    // echo forward link for next page 
-   echo " <a href='{$_SERVER['PHP_SELF']}?currentpage=$nextpage&per=$per'>></a> ";
-   // echo forward link for lastpage
-   echo " <a href='{$_SERVER['PHP_SELF']}?currentpage=$totalpages&per=$per'>>></a> ";
-} // end if
-/****** end build pagination links ******/
-?>
-        </center>
+    
+        <!-- begin pagination section -->
+        
+        <div class="row mt-5">
+            <div class="col-md-8 offset-md-2">
+                <nav aria-label="Paging">
+                    <ul class="pagination justify-content-center">
+                        <?php 
+                            //set range
+                            $range = 3;
+                        
+                            //check if page is greater than 1 and show appropriate first and previous links
+                            if($currentpage > 1) {
+                                echo '<li class="page-item btnPageWords">
+                                <a class="page-link" href="products.php?currentpage=1&per=' . $per . '">
+                                <span aria-hidden="true">First</span>
+                                <span class="sr-only">First</span>
+                                </a>
+                                </li>';
+                                
+                                //set the previous page number
+                                $prevpage = $currentpage -1;
+                                
+                                echo '<li class="page-item btnPageSym">
+                                <a class="page-link" href="products.php?currentpage='. $prevpage . '&per=' . $per . '">
+                                <span aria-hidden="true">&laquo</span>
+                                <span class="sr-only">Previous</span>
+                                </a>
+                                </li>';
+                                
+                            }
+                                
+                            //loop to show print the range of numbers around current page
+                            for($i = ($currentpage - $range); $i < ($currentpage + $range); $i++) {
+                                //validate page number
+                                if (($i > 0) && ($i <= $totalpages)) {
+                                    //if current page make it active
+                                    if ($i == $currentpage) {
+                                        echo '<li class="page-item"><a class="page-link active" href="#">' . $i . '</a></li>';
+                                    } else {
+                                        echo '<li class="page-item"><a class="page-link" href="products.php?currentpage='. $i. '&per=' . $per . '">'. $i . '</a></li>';
+                                    }
+                                }
+                            }
+                        
+                            //if not the last page show forward and last links
+                            if ($currentpage != $totalpages) {
+                                //set next page
+                                $nextpage = $currentpage + 1;
+                                
+                                echo '<li class="page-item btnPageSym">
+                                <a class="page-link" href="products.php?currentpage=' . $nextpage . '&per=' . $per . '">
+                                <span aria-hidden="true">&raquo</span>
+                                <span class="sr-only">Next</span>
+                                </a>
+                                </li>';
+                                
+                                echo '<li class="page-item btnPageWords">
+                                <a class="page-link" href="products.php?currentpage=' . $totalpages . '&per=' . $per . '">
+                                <span aria-hidden="true">Last</span>
+                                <span class="sr-only">Last</span>
+                                </a>
+                                </li>';
+                                
+                            }
+                        
+                        ?>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        
         <div id="footer">
             <div class="container-fluid">
                 <div class="row text-center">

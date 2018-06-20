@@ -60,6 +60,10 @@ body {
     margin-top: -5px;
 }
 
+.cart {
+    color: #f26722;
+}
+
 .filler {
     height: 40px;
     background-image: 
@@ -81,6 +85,8 @@ body {
     margin-right: 2px;
     background-color:  #d9dde0;
     border-radius:  0;
+    font-weight: 600;
+    color: #4d5a60;
 }
 
 .dropdown-toggle  {
@@ -89,6 +95,10 @@ body {
 
 .dropdown-menu {
     background-color: #f26722;
+}
+
+.dropdown-menu a {
+    font-weight: 600;
 }
 
 .dropdown-divider {
