@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 
+<?php
+    require 'scripts/php/dbConnect.php';
+?>
+
 <html lang="en">
 
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">          
-        <title>Home - Commonwealth Trailer Parts</title>
+        <title>Admin - Commonwealth Trailer Parts</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
@@ -61,10 +65,19 @@
         </div><!-- end filler -->
         
         <!-- create the main content for the page here -->
-        <div class="container-fluid">
+        <div class="container-fluid" id="productLookup">
             <div class="row text-center mt-3 mb-3">
                 <div class="col-md-8 offset-md-2">
                     <h3>Admin Area</h3>
+                    
+                    <!-- create basic page navigation -->
+                    <div class="container-fluid mb-3 links">
+                        <a href="#productLookup">PRODUCT LOOKUP</a>
+                        <a href="#addProduct" class="separate">ADD PRODUCT</a>
+                        <a href="#userLookup" class="separate">USER LOOKUP</a> 
+                        <a href="#userAdd" class="separate">ADD USER</a>
+                    </div><!-- end basic page navigation -->
+                    
                     <h5 class="text-left">PRODUCT LOOKUP</h5>
                     <form class="form-inline" method="POST" action="admin.php">
                         <select class="form-control orange mr-3 mb-3" name="selProduct">
@@ -78,36 +91,240 @@
                 </div>
             </div><!-- end row -->
         </div><!-- end container-fluid -->
+        <!-- end the product lookup area -->
         
         <!-- display the product or display hint to use form to search for a product -->
-        <div class="container-fluid">
+        <div class="container-fluid mb-3">
             <div class="row text-center">
-                <div class="col-md-8 offset-md-2" style="border:solid 1px blue;">
+                <div class="col-md-8 offset-md-2">
                     <?php
-                        if(isset($_POST['selProduct']) && empty($_POST['txtProduct'])) {
+                        if(empty($_POST['txtProduct'])) {
                            echo '<p>Please use the form above to search for and edit/delete a product.</p>';
+                            echo '<hr class="hr">';
                         } else {
-                            $type = $_POST['selProduct'];
-                            if ($type == 'SKU') {
+                            //if the user is search for a product do the following
+                            
+                            //set the column to search on
+                            $which = $_POST['selProduct'];
+                            if ($which == 'SKU') {
                                 $col = 'sku';
-                            } elseif ($type == 'BARCODE') {
+                            } elseif ($which == 'BARCODE') {
                                 $col = 'bc';
-                            } elseif ($type == 'BARCODE IMAGE') {
+                            } elseif ($which == 'BARCODE IMAGE') {
                                 $col = 'bcImage';
                             }
                             
-                            $getProductSQL = "SELECT * FROM products WHERE $col = :col";
+                            //set the data you are searching for
+                            $searchFor = $_POST['txtProduct'];
+                            
+                            //execute the search and store it in the products array
+                            $getProductSQL = "SELECT * FROM products WHERE $col = :searchFor";
                             $getProduct = $con->prepare($getProductSQL);
-                            $getProduct->bindParam(':col', $col);
+                            $getProduct->bindParam(':searchFor', $searchFor);
                             $getProduct->execute();
                             $product = $getProduct->fetch(PDO::FETCH_ASSOC);
                             
-                            print_r($product);
+                            if(empty($product)) {
+                                echo '<p>Product not found. Please try again.</p>';
+                            } else {
+                            //set the pic path
+                                if(empty($product['pic'])) {
+                                    $picLoc = 'images/unavailable.png';
+                                } else {
+                                    $picLoc = 'images/thumbs/' . $p['pic'];
+                                }
+
+                                //set variables from the products array
+                                $id = $product['id'];
+                                $sku = $product['sku'];
+                                $description = $product['description'];
+                                $type = $product['type'];
+                                $stock = $product['inventory'];
+                                $vendor = $product['vendor'];
+                                $bc = $product['bc'];
+                                $bcImage = $product['bcImage'];
+
+                                //echo the update form onto the page
+                                echo '<div class="container-fluid text-left">';
+                                echo '<form class="form" name="upProduct" method="POST" action="scripts/php/update.php">';
+                                echo '<input type="hidden" name="id" value="' . $id . '">';
+                                echo '<label>SKU</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="sku" value="' . $sku . '">';
+                                echo '<label>DESCRIPTION</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="description" value="' . $description . '">';
+                                echo '<label>TYPE</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="type" value="' . $type . '">';
+                                echo '<label>QUANTITY ON HAND</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="stock" value="' . $stock . '">';
+                                echo '<label>VENDOR</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="vendor" value="' . $vendor . '">';
+                                echo '<label>BARCODE</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="bc" value="' . $bc . '">';
+                                echo '<label>BARCODE IMAGE</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="bcImage" value="' .$bcImage . '">';
+                                echo '<div class="container-fluid text-right mb-3">';
+                                echo '<input type="submit" value="UPDATE" class="btnUpdate mr-2">';
+                                echo '<input type="submit" value="DELETE" formaction="scripts/php/delete.php" class="btnUpdate">';
+                                echo '</div>';
+                                echo '</form>';
+                                echo '<hr class="hr">';
+                                echo '</div>';
+                            }
                         }
                     ?>
                 </div>
             </div>
         </div><!--end container-fluid -->
+        <!-- end the product update/delete section -->
+        
+        <!-- create the add product area -->
+        <div class="container-fluid" id="addProduct">
+            <div class="row text-center mt-3 mb-3">
+                <div class="col-md-8 offset-md-2">
+                    <h5 class="text-left">ADD PRODUCT</h5>
+                    <form class="form text-left" method="POST" action="scripts/php/add.php">
+                        <label>SKU</label>
+                        <input type="text" name="sku" class="form-control orange mb-3">
+                        <label>DESCRIPTION</label>
+                        <input type="text" name="description" class="form-control orange mb-3">
+                        <label>TYPE</label>
+                        <input type="text" name="type" class="form-control orange mb-3">
+                        <label>QUANTITY ON HAND</label>
+                        <input type="text" name="stock" class="form-control orange mb-3">
+                        <label>VENDOR</label>
+                        <input type="text" name="vendor" class="form-control orange mb-3">
+                        <label>BARCODE</label>
+                        <input type="text" name="bc" class="form-control orange mb-3">
+                        <label>BARCODE IMAGE</label>
+                        <input type="text" name="bcImage" class="form-control orange mb-3">
+                        <label>PHOTO</label>
+                        <input type="file" class="form-control-file mb-3" name="pid">
+                        <div class="container-fluid text-center">
+                            <input type="submit" class="btn btnPLookup" value="ADD PRODUCT">
+                        </div>
+                    </form>
+                    <hr class="hr mt-3">
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+        <!-- end add product area -->
+        
+        <!-- create the user lookup area -->
+        <div class="container-fluid" id="userLookup">
+            <div class="row text-center mt-3 mb-3">
+                <div class="col-md-8 offset-md-2">
+                    <h5 class="text-left">USER LOOKUP</h5>
+                    <form class="form-inline" method="POST" action="admin.php#userLookup">
+                        <select class="form-control orange mr-3 mb-3" name="userType">
+                            <option class="changeHover">USERNAME</option>
+                            <option class="changeHover">EMAIL</option>
+                        </select>
+                        <input type="text" class="form-control orange mr-3 mb-3" name="userSearch">
+                        <button class="btn mb-3 btnPLookup" type="submit">LOOK UP</button> 
+                    </form>
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+        <!-- end user lookup area -->
+        
+        <!-- display the user for update or delete area or give a hint to use form above to locate a user -->
+        <div class="container-fluid mb-3">
+            <div class="row text-center">
+                <div class="col-md-8 offset-md-2">
+                    <?php
+                        //set search string variable based on the post data
+                        $searchString = $_POST['userSearch'];
+                    
+                        //if search string is empty show hint to use form to lookup user otherwise begin //user lookup
+                        if(empty($searchString)) {
+                            echo '<p>Please use the form above to locate and update/delete a user.</p>';
+                            echo '<hr class="hr">';
+                        } else {
+                            //set the column to search on
+                            $userType = $_POST['userType'];
+                            if ($userType == 'USERNAME') {
+                                $col = 'uname';
+                            } elseif ($userType == 'EMAIL') {
+                                $col = 'email';
+                            }
+                            
+                            //search for the user in the table
+                            $getUserSQL = "SELECT id, uname, email, first, last FROM users WHERE $col = :user";
+                            $getUser = $con->prepare($getUserSQL);
+                            $getUser->bindParam(':user', $searchString);
+                            $getUser->execute();
+                            $userData = $getUser->fetch(PDO::FETCH_ASSOC);
+                            
+                            //if the user doesn't exist display user not found otherwise display user //details form with update/delete buttons.
+                            if (empty($userData)) {
+                                echo '<p>The user was not found. Please try again.</p>';
+                                echo '<hr class="hr">';
+                            } else {
+                                //set user variables
+                                $uid = $userData['id'];
+                                $first = $userData['first'];
+                                $last = $userData['last'];
+                                $userName = $userData['uname'];
+                                $email = $userData['email'];
+                                
+                                //echo the data to the screen in an updatable form
+                                echo '<div class="container-fluid">';
+                                echo '<form class="form text-left" name="updateUserFrm" method="POST" action="scripts/php/updateUser.php">';
+                                echo '<input type="hidden" name="id" value="' . $uid . '">';
+                                echo '<label>FIRST NAME</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="first" value="' . $first .'">';
+                                echo '<label>LAST NAME</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="last" value="' . $last . '">';
+                                echo '<label>USERNAME</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="uname" value="' . $userName . '">';
+                                echo '<label>EMAIL</label>';
+                                echo '<input class="form-control orange mb-3" type="text" name="email" value="' . $email . '">';
+                                echo '<div class="container-fluid text-right">';
+                                echo '<input type="submit" value="UPDATE" class="btnUpdate">';
+                                echo '<input type="submit" value="DELETE" class="btnUpdate ml-3"  formaction="scripts/php/deleteUser.php">';
+                                echo '</div>';
+                                echo '</form>';
+                                echo '<hr class="hr mt-3">';
+                                echo '</div>';
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+        </div><!-- end container-fluid -->
+        <!-- end user lookup area -->
+        
+        <!-- start user add area -->
+        <div class="container-fluid" id="userAdd">
+            <div class="row text-center mt-3 mb-3">
+                <div class="col-md-8 offset-md-2">
+                    <h5 class="text-left">ADD USER</h5>
+                    <form class="form text-left" method="POST" action="scripts/php/addUser.php">
+                        <label>FIRST NAME</label>
+                        <input type="text" name="fname" class="form-control orange mb-3">
+                        <label>LAST NAME</label>
+                        <input type="text" name="lname" class="form-control orange mb-3">
+                        <label>USERNAME</label>
+                        <input type="text" name="uname" class="form-control orange mb-3">
+                        <label>EMAIL</label>
+                        <input type="text" name="email" class="form-control orange mb-3">
+                        <div class="container-fluid text-center">
+                            <input type="submit" class="btn btnPLookup" value="ADD USER">
+                        </div>
+                    </form>
+                    <hr class="hr mt-3">
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container fluid -->
+        <!-- end user add area -->
+        
+        <!-- create basic page navigation -->
+        <div class="container-fluid mb-3 links text-center">
+            <a href="#productLookup">PRODUCT LOOKUP</a>
+            <a href="#addProduct" class="separate">ADD PRODUCT</a>
+            <a href="#userLookup" class="separate">USER LOOKUP</a> 
+            <a href="#userAdd" class="separate">ADD USER</a>
+        </div><!-- end basic page navigation -->
         
         <div id="footer">
             <div class="container-fluid">

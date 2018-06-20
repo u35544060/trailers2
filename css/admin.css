@@ -1,9 +1,51 @@
 .orange {
-    border: solid 2px #f26722;
+    border: solid 2px #d9dde0;
 }
 
 .btnPLookup {
-    background-color: #4e5a60;
+    background-color: #f26722;
     color: white;
     box-shadow:  0 0 10px #4e5a60;
+}
+
+label {
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+}
+
+.form-control:focus {
+    border-color: #f26722;
+    box-shadow:  0 1px 1px #f26722 inset, 0 0 8px #f26722;
+}
+
+.btnUpdate {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height:  1.5;
+    border-radius: .25rem;
+    border: none;
+    background-color: #f26722;
+    color: white;
+    box-shadow: 0 0 10px #4e5a60;
+}
+
+.hr {
+    margin:0;
+    border-top: solid 1px #f26722;
+}
+
+.separate:before {
+    content: "| ";
+}
+
+.links a {
+    color: #f26722;
+}
+
+.links a:hover {
+    color: #4e5a60;
 }
