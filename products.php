@@ -161,7 +161,7 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-sm-10 text-right align-self-center smallSort">
                             <div class="dropdown">
-                                <span class="mr-1">SORT BY:</span>
+                                <span class="mr-1">SORT BY</span>
                                 <button class="btn btn-secondary dropdown-toggle btn-sm ddDark" type="button" id="ddSort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                    A-Z
                                 </button> 
