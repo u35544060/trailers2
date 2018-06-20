@@ -1,10 +1,12 @@
 <?php
 
-$host = 'localhost';
-$uname = 'trailers';
-$pass = 'omNS2EsqbWYGtexl';
-$db = 'trailers';
-$char = 'utf8';
+$config = parse_ini_file('/var/opt/trailers/config.ini');
+$host = $config['server'];
+$uname = $config['username'];
+$pass = $config['password'];
+$db = $config['database'];
+$char = $config['char'];
+
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$char";
 $opt = [
