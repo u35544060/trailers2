@@ -49,3 +49,11 @@ label {
 .links a:hover {
     color: #4e5a60;
 }
+
+.dropdown-item {
+    color: white !important;
+}
+
+.dropdown-item:hover {
+    color: black !important;
+}

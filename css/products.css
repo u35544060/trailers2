@@ -65,6 +65,11 @@ h3 {
     color: white;
 }
 
+.dropdown-item:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
 
 
 
