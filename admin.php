@@ -278,7 +278,7 @@
                                 echo '<label>LAST NAME</label>';
                                 echo '<input class="form-control orange mb-3" type="text" name="last" value="' . $last . '">';
                                 echo '<label>USERNAME</label>';
-                                echo '<input class="form-control orange mb-3" type="text" name="uname" value="' . $userName . '">';
+                                echo '<input class="form-control orange mb-3" type="text" name="uname" value="' . $userName . '" readonly>';
                                 echo '<label>EMAIL</label>';
                                 echo '<input class="form-control orange mb-3" type="text" name="email" value="' . $email . '">';
                                 echo '<div class="container-fluid text-right">';
