@@ -233,7 +233,9 @@
                 <div class="col-md-8 offset-md-2">
                     <?php
                         //set search string variable based on the post data
-                        $searchString = $_POST['userSearch'];
+                        if (isset($_POST['userSearch'])) {
+                            $searchString = $_POST['userSearch'];
+                        }
                     
                         //if search string is empty show hint to use form to lookup user otherwise begin //user lookup
                         if(empty($searchString)) {

@@ -73,6 +73,13 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
     </head>
     
     <style>
+        
+        @media screen and (min-width: 1550px) and (max-width: 6000px) {
+            .stock {
+                left: 14%;
+            }
+        }
+              
         @media screen and (max-width: 400px) {
             .stock {
                 left: 21%;
@@ -82,7 +89,9 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                 text-align: left !important;
                 margin-top: 10px !important;
             }
-        }        
+        }
+        
+         
     </style>
     <body>
         <!-- create the naviagation for the page -->
@@ -166,10 +175,10 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                                    A-Z
                                 </button> 
                                 <div class="dropdown-menu" aria-labelledby="ddSort">
-                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=vend">By Vendor</a>
-                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=az">Alphabetically: A to Z</a>
-                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=za">Alphabetically: Z to A</a>
-                                    <a class="dropdown-item" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=new">Newest Available</a>
+                                    <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=vend">By Vendor</a>
+                                    <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=az">Alphabetically: A to Z</a>
+                                    <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=za">Alphabetically: Z to A</a>
+                                    <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=new">Newest Available</a>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +191,7 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                         <?php
                         $it = 0;
                             foreach($prods as $p) {
-                                $x++;
+                                $it++;
                                 
                                 if(empty($p['pic'])) {
                                     $picLoc = 'images/unavailable.png';
@@ -201,8 +210,8 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                                 echo '<button class="btn btnCart" type="button">ADD TO CART</button>';
                                 echo '</div>';
                                 
-                                if ($x ==4) {
-                                    $x = 0;
+                                if ($it ==4) {
+                                    $it = 0;
                                     echo '</div><div class="row text-center">';
                                 }
                             }

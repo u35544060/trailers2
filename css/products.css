@@ -11,6 +11,10 @@ h3 {
     font-weight: 600;
 }
 
+.white {
+    color: white;
+}
+
 #smallMenu{
     width: 50px !important;
     min-width: 50px !important;
@@ -26,9 +30,10 @@ h3 {
     border: solid 1px #4d5a60;
     background-color: #4d5a60;
     color: white;
+    margin: auto;
+    padding: 5px;
     position: absolute;
     top: 4px;
-    padding: 5px;
 }
 
 .tiles {
@@ -60,10 +65,7 @@ h3 {
     color: white;
 }
 
-.active {
-    background-color: #f26722;
-    color: white !important;
-}
+
 
 
 
