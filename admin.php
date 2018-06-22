@@ -102,7 +102,7 @@
                            echo '<p>Please use the form above to search for and edit/delete a product.</p>';
                             echo '<hr class="hr">';
                         } else {
-                            //if the user is search for a product do the following
+                            //if the user is searching for a product do the following
                             
                             //set the column to search on
                             $which = $_POST['selProduct'];
@@ -131,9 +131,9 @@
                                 if(empty($product['pic'])) {
                                     $picLoc = 'images/unavailable.png';
                                 } else {
-                                    $picLoc = 'images/thumbs/' . $p['pic'];
+                                    $picLoc = 'images/thumbs/' . $product['pic'];
                                 }
-
+                                
                                 //set variables from the products array
                                 $id = $product['id'];
                                 $sku = $product['sku'];
@@ -162,6 +162,15 @@
                                 echo '<input class="form-control orange mb-3" type="text" name="bc" value="' . $bc . '">';
                                 echo '<label>BARCODE IMAGE</label>';
                                 echo '<input class="form-control orange mb-3" type="text" name="bcImage" value="' .$bcImage . '">';
+                                echo '<div class="container-fluid mb-3">';
+                                echo '<table><tr>';
+                                echo '<td class="align-top"><label>CURRENT IMAGE</label></td>';
+                                echo '</tr><tr>';
+                                echo '<td><img src="' . $picLoc . '"></td>';
+                                echo '<tr><td><label class="mt-4">UPDATE IMAGE</label></td></tr>';
+                                echo '<tr><td><input type="file" name="pid"></td>';
+                                echo '</tr></table>';
+                                echo '</div>';
                                 echo '<div class="container-fluid text-right mb-3">';
                                 echo '<input type="submit" value="UPDATE" class="btnUpdate mr-2">';
                                 echo '<input type="submit" value="DELETE" formaction="scripts/php/delete.php" class="btnUpdate">';
