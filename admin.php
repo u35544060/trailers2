@@ -146,7 +146,7 @@
 
                                 //echo the update form onto the page
                                 echo '<div class="container-fluid text-left">';
-                                echo '<form class="form" name="upProduct" method="POST" action="scripts/php/update.php">';
+                                echo '<form class="form" name="upProduct" method="POST" action="scripts/php/update.php" enctype="multipart/form-data">';
                                 echo '<input type="hidden" name="id" value="' . $id . '">';
                                 echo '<label>SKU</label>';
                                 echo '<input class="form-control orange mb-3" type="text" name="sku" value="' . $sku . '">';
@@ -182,9 +182,9 @@
             <div class="row text-center mt-3 mb-3">
                 <div class="col-md-8 offset-md-2">
                     <h5 class="text-left">ADD PRODUCT</h5>
-                    <form class="form text-left" method="POST" action="scripts/php/add.php">
+                    <form class="form text-left" method="POST" action="scripts/php/add.php" enctype="multipart/form-data">
                         <label>SKU</label>
-                        <input type="text" name="sku" class="form-control orange mb-3">
+                        <input type="text" name="sku" class="form-control orange mb-3" required>
                         <label>DESCRIPTION</label>
                         <input type="text" name="description" class="form-control orange mb-3">
                         <label>TYPE</label>
@@ -303,13 +303,13 @@
                     <h5 class="text-left">ADD USER</h5>
                     <form class="form text-left" method="POST" action="scripts/php/addUser.php">
                         <label>FIRST NAME</label>
-                        <input type="text" name="fname" class="form-control orange mb-3">
+                        <input type="text" name="fname" class="form-control orange mb-3" required>
                         <label>LAST NAME</label>
-                        <input type="text" name="lname" class="form-control orange mb-3">
+                        <input type="text" name="lname" class="form-control orange mb-3" required>
                         <label>USERNAME</label>
-                        <input type="text" name="uname" class="form-control orange mb-3">
+                        <input type="text" name="uname" class="form-control orange mb-3" required>
                         <label>EMAIL</label>
-                        <input type="text" name="email" class="form-control orange mb-3">
+                        <input type="text" name="email" class="form-control orange mb-3" required>
                         <div class="container-fluid text-center">
                             <input type="submit" class="btn btnPLookup" value="ADD USER">
                         </div>
