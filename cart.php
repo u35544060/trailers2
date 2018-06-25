@@ -76,7 +76,7 @@ session_start();
         </div><!-- end filler -->
         
         <!-- create the main content for the page here -->
-        
+        <?php print_r($_SESSION['cartItems']); ?>
         
         <div id="footer">
             <div class="container-fluid">

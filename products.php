@@ -12,6 +12,7 @@ if(!isset($_SESSION['cartItems'])) {
     $_SESSION['cartItems'] = array();
 }
 
+//if the session variable cartCount is not set, set it to 0
 if(!isset($_SESSION['cartCount'])) {
     $_SESSION['cartCount'] = 0;
 }
@@ -21,7 +22,12 @@ if(isset($_POST['sku'])) {
     //set a temporary array for the product being added
     $newProd['id'] = $_POST['id'];
     $newProd['sku'] = $_POST['sku'];
-    
+    if(isset($_POST['quantity'])) {
+        $newProd['quantity'] = $_POST['quantity'];
+    } else {
+        $newProd['quantity'] = 1;  
+    }
+        
     //if the product is already in the array do nothing, if it isn't add it to the session array also adjust count in cart
     if(in_array($newProd, $_SESSION['cartItems'])) {
         $_SESSION['cartItems'] = $_SESSION['cartItems'];
@@ -246,6 +252,10 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                                 echo '<form name="frmAddToCart" method="POST" action="products.php?currentpage=' . $currentpage . '&per=' .$per . '">';
                                 echo '<input type="hidden" name="id" value="' . $p['id'] . '">';
                                 echo '<input type="hidden" name="sku" value="' . $p['sku'] . '">';
+                                echo '<div class="row form-group quantity text-left mt-2">';
+                                echo '<label class="col-5 offset-1 col-form-label" for="quantity">QUANTITY</label>';
+                                echo '<input type="text" class="col-3 offset-1" name="quantity" id="quantity" placeholder="1">';
+                                echo '</div>';
                                 echo '<button type="btn" class="btnUpdate mt-2 mb-3" type="submit"><span class="fas fa-shopping-cart mr-1"></span>ADD TO CART</button>';
                                 echo '</form></td></tr>';
                                 echo '</table>';
