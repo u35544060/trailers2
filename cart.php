@@ -7,6 +7,11 @@ require 'scripts/php/dbConnect.php';
 //start session to store cart items array
 session_start();
 
+//if the session variable cartCount is not set, set it to 0
+if(!isset($_SESSION['cartCount'])) {
+    $_SESSION['cartCount'] = 0;
+}
+
 ?>
 
 <html lang="en">
@@ -76,7 +81,68 @@ session_start();
         </div><!-- end filler -->
         
         <!-- create the main content for the page here -->
-        <?php print_r($_SESSION['cartItems']); ?>
+        <!-- create the cart -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-8 offset-2 brdOrange mt-4 mb-5 align-middle">
+                    <div class="row">
+                        <div class="col-12">
+                        <h2>MY CART</h2>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-8 offset-2">
+                    <div class="row">
+                        <div class="cartWrapper">
+                            <ul class="cartWrap">
+                                <?php 
+                                    if($_SESSION['cartCount'] < 1) {
+                                        echo '<h3>YOUR CART IS EMPTY.</h3>';
+                                    } else {
+                                        foreach($_SESSION['cartItems'] as $item) {
+                                            $prodID = $item['id'];
+                                            $getProdInfoSQL = "SELECT * FROM products WHERE id = :id";
+                                            $getProdInfo = $con->prepare($getProdInfoSQL);
+                                            $getProdInfo->bindParam(':id', $prodID);
+                                            $getProdInfo->execute();
+
+                                            $prodInfo = $getProdInfo->fetch(PDO::FETCH_ASSOC);
+
+                                            if (empty($prodInfo['pic'])) {
+                                                $picLoc = 'images/unavailable.png';
+                                            } else {
+                                                $picLoc = 'images/thumbs/' . $prodInfo['pic'];
+                                            }
+
+                                            echo '<li class="items">';
+                                            echo '<div class="infoWrap">';
+                                            echo '<div class="cartSection">';
+                                            echo '<img src="' . $picLoc . '" class="itemImg">';
+                                            echo '<p class="itemSku">' . $prodInfo['sku'] . '</p>';
+                                            echo '<h5>' . $prodInfo['description'] . '</h5>';
+                                            echo '<p><input type="text" class="qty mt-3" value="' . $item['quantity'] . '"> QUANTITY</p>';
+                                            if($prodInfo['inventory'] > 1) {
+                                                echo '<p class="stockStatus">IN STOCK</p>';
+                                            }
+                                            echo '</div>';
+                                            echo '<div class="cartSection removeWrap"><a href="#" class="remove">X</a></div>';
+                                            echo '</div>';
+                                            echo '</li>';
+
+                                        }
+                                    }
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end cart -->
         
         <div id="footer">
             <div class="container-fluid">

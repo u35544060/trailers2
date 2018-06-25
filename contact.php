@@ -7,6 +7,11 @@ require 'scripts/php/dbConnect.php';
 //start session to store cart items array
 session_start();
 
+//if the session variable cartCount is not set, set it to 0
+if(!isset($_SESSION['cartCount'])) {
+    $_SESSION['cartCount'] = 0;
+}
+
 ?>
 
 <html lang="en">

@@ -22,7 +22,8 @@ if(isset($_POST['sku'])) {
     //set a temporary array for the product being added
     $newProd['id'] = $_POST['id'];
     $newProd['sku'] = $_POST['sku'];
-    if(isset($_POST['quantity'])) {
+    $newProd['description'] = $_POST['description'];
+    if(!empty($_POST['quantity'])) {
         $newProd['quantity'] = $_POST['quantity'];
     } else {
         $newProd['quantity'] = 1;  
@@ -252,9 +253,10 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                                 echo '<form name="frmAddToCart" method="POST" action="products.php?currentpage=' . $currentpage . '&per=' .$per . '">';
                                 echo '<input type="hidden" name="id" value="' . $p['id'] . '">';
                                 echo '<input type="hidden" name="sku" value="' . $p['sku'] . '">';
+                                echo '<input type="hidden" name="description" value="' . $p['description'] . '">';
                                 echo '<div class="row form-group quantity text-left mt-2">';
                                 echo '<label class="col-5 offset-1 col-form-label" for="quantity">QUANTITY</label>';
-                                echo '<input type="text" class="col-3 offset-1" name="quantity" id="quantity" placeholder="1">';
+                                echo '<input type="text" class="col-3 offset-1 text-center" name="quantity" id="quantity" placeholder="1">';
                                 echo '</div>';
                                 echo '<button type="btn" class="btnUpdate mt-2 mb-3" type="submit"><span class="fas fa-shopping-cart mr-1"></span>ADD TO CART</button>';
                                 echo '</form></td></tr>';
