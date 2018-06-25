@@ -4,34 +4,6 @@
 
 require 'scripts/php/dbConnect.php';
 
-//start session to store cart items array
-session_start();
-
-//if no items are already in cart set the session variable equal to an empty array
-if(!isset($_SESSION['cartItems'])) {
-    $_SESSION['cartItems'] = array();
-}
-
-if(!isset($_SESSION['cartCount'])) {
-    $_SESSION['cartCount'] = 0;
-}
-
-//if someone tries to add something to the cart do the following
-if(isset($_POST['sku'])) {
-    //set a temporary array for the product being added
-    $newProd['id'] = $_POST['id'];
-    $newProd['sku'] = $_POST['sku'];
-    
-    //if the product is already in the array do nothing, if it isn't add it to the session array also adjust count in cart
-    if(in_array($newProd, $_SESSION['cartItems'])) {
-        $_SESSION['cartItems'] = $_SESSION['cartItems'];
-    } else {
-        array_push($_SESSION['cartItems'], $newProd);
-        $_SESSION['cartCount'] = count($_SESSION['cartItems']);
-    }
-    
-}
-
 //find out how many rows are in the table
 $countSQL = 'SELECT NULL FROM products';
 $countProds = $con->prepare($countSQL);
@@ -92,7 +64,6 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js" integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="scripts/js/cart.js"></script>
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -117,7 +88,7 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
         
          
     </style>
-    <body>        
+    <body>
         <!-- create the naviagation for the page -->
         <nav class="navbar navbar-expand-md navbar-light noPad justify-content-center">
             <div class="container noPad">
@@ -133,7 +104,7 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html" style="color:#212121">CONTACT</a>
                         </li>
-                        <li class="nav-item dropdown active">
+                        <li class="nav-item active dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="prodDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#212121">PRODUCTS</a>
                             <div class="dropdown-menu" aria-labelledby="prodDrop">
                                 <a class="dropdown-item" href="products.php?type=all">ALL PRODUCTS</a>
@@ -149,14 +120,11 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                 <div class="headerPhone align-self-end center mr-5">
                     <h6 class="align-self-end">Call Now: <a href="tel:7179384603">(717)-938-4603</a></h6>
                 </div><!-- end headerPhone -->
-                
-            </div><!-- end container -->
-            <div class="align-self-end justify-content-end cartWrap text-right" id="cartWrap">
-                    <a href="cart.php" class="clearLink justify-content-end text-right">
-                        <span id="cartIconSpan"><img class="cartIcon" src="images/cart.png" id="cartIcon"></span>
-                        <span class="cartCount" id="cartCount">CART <span class="circle">( <?php echo $_SESSION['cartCount']; ?> )</span></span>
-                    </a>
+                <div class="align-self-end justify-content-end cartWrap" id="cartWrap">
+                    <span class="align-self-end" id="cartIconSpan"><img class="cartIcon" src="images/cart.png" id="cartIcon"></span>
+                    <span class="cartCount" id="cartCount">CART(0)</span>
                 </div><!-- end cartIcon -->
+            </div><!-- end container -->
         </nav> <!-- end nav section -->
         
         <!-- create the bar beneath the nav and the search bar -->
@@ -205,7 +173,7 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                                 <button class="btn btn-secondary dropdown-toggle btn-sm ddDark" type="button" id="ddSort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                    A-Z
                                 </button> 
-                                <div class="dropdown-menu ddDark" aria-labelledby="ddSort">
+                                <div class="dropdown-menu" aria-labelledby="ddSort">
                                     <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=vend">By Vendor</a>
                                     <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=az">Alphabetically: A to Z</a>
                                     <a class="dropdown-item white" href="products.php?page=1&per=<?php echo $rowsperpage ?>&sort=za">Alphabetically: Z to A</a>
@@ -244,7 +212,7 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                                 echo '<p class="tiles">' . $p['description'];
                                 echo '</td></tr>';
                                 echo '<tr><td>';
-                                echo '<form name="frmAddToCart" method="POST" action="products.php?currentpage=' . $currentpage . '&per=' .$per . '">';
+                                echo '<form name="frmAddToCart" method="POST" action="products2.php">';
                                 echo '<input type="hidden" name="id" value="' . $p['id'] . '">';
                                 echo '<input type="hidden" name="sku" value="' . $p['sku'] . '">';
                                 echo '<button type="btn" class="btnUpdate mt-2 mb-3" type="submit"><span class="fas fa-shopping-cart mr-1"></span>ADD TO CART</button>';

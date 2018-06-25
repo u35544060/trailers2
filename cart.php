@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 
+<?php
+
+require 'scripts/php/dbConnect.php';
+
+//start session to store cart items array
+session_start();
+
+?>
+
 <html lang="en">
 
     <head>
@@ -18,7 +27,6 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link rel="stylesheet" type="text/css" href="css/home.css">
     </head>
     <body>
         <!-- create the naviagation for the page -->
@@ -30,7 +38,7 @@
                 </button>
                 <div class="collapse navbar-collapse align-self-end" id="subMenu">
                     <ul class="navbar-nav nav-tabs">
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a class="nav-link" href="about.html" style="color:#212121;">ABOUT</a>
                         </li>
                         <li class="nav-item">
@@ -52,11 +60,13 @@
                 <div class="headerPhone align-self-end center mr-5">
                     <h6 class="align-self-end">Call Now: <a href="tel:7179384603">(717)-938-4603</a></h6>
                 </div><!-- end headerPhone -->
-                <div class="align-self-end justify-content-end cartWrap" id="cartWrap">
-                    <span class="align-self-end" id="cartIconSpan"><img class="cartIcon" src="images/cart.png" id="cartIcon"></span>
-                    <span class="cartCount" id="cartCount">CART(0)</span>
-                </div><!-- end cartIcon -->
             </div><!-- end container -->
+            <div class="align-self-end justify-content-end cartWrap text-right" id="cartWrap">
+                <a href="cart.php" class="clearLink justify-content-end text-right">
+                    <span id="cartIconSpan"><img class="cartIcon" src="images/cart.png" id="cartIcon"></span>
+                    <span class="cartCount" id="cartCount">CART <span class="circle">( <?php echo $_SESSION['cartCount']; ?> )</span></span>
+                </a>
+            </div><!-- end cartIcon -->
         </nav> <!-- end nav section -->
         
         <!-- create the bar beneath the nav -->
@@ -64,45 +74,8 @@
         
         </div><!-- end filler -->
         
-        <!-- create the main content for the homepage here -->
+        <!-- create the main content for the page here -->
         
-        <div class="container-fluid">
-            <div>
-                <div class="text-center col-md-12 mt-3">
-                    <h3>COMMONWEALTH TRAILER PARTS</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                        <div id="carouselWrapper" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#carouselWrapper" data-slide-to="0" class="active"></li>
-                                <li data-target="#carouselWrapper" data-slideto="1"></li>
-                                <li data-target="#carouselWrapper" data-slideto="2"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img class="d-block w-100" src="images/truck1.jpg" alt="Truck 1">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="images/truck2.jpeg" alt="Truck 2">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="images/truck3.jpg" alt="Truck 3">
-                                </div>
-                            </div>
-                            <a class="carousel-control-prev" href="#carouselWrapper" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselWrapper" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                </div><!-- end carousel -->
-            </div><!-- end row -->
-        </div>
         
         <div id="footer">
             <div class="container-fluid">

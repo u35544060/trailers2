@@ -1,5 +1,3 @@
 $(document).ready(function() {
-    $('#info'). hover(function() {
-        $('#infoBar').show();
-    });
+    $('[data-toggle="tooltip"]').tooltip();
 });
