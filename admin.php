@@ -34,17 +34,17 @@
         <!-- create the naviagation for the page -->
         <nav class="navbar navbar-expand-md navbar-light noPad justify-content-center">
             <div class="container noPad">
-                <a class="navbar-brand" href="index.html"><img src="images/cmwtrlparts.png"></a>
+                <a class="navbar-brand" href="index.php"><img src="images/cmwtrlparts.png"></a>
                 <button class="navbar-toggler mr-4" type="button" data-toggle="collapse" data-target="#subMenu" aria-controls="subMenu" aria-expanded="false" aria-label="Toggle Navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse align-self-end" id="subMenu">
                     <ul class="navbar-nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link" href="about.html" style="color:#212121;">ABOUT</a>
+                            <a class="nav-link" href="about.php" style="color:#212121;">ABOUT</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="contact.html" style="color:#212121">CONTACT</a>
+                            <a class="nav-link" href="contact.php" style="color:#212121">CONTACT</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="prodDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#212121">PRODUCTS</a>

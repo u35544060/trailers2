@@ -121,17 +121,17 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
         <!-- create the naviagation for the page -->
         <nav class="navbar navbar-expand-md navbar-light noPad justify-content-center">
             <div class="container noPad">
-                <a class="navbar-brand" href="index.html"><img src="images/cmwtrlparts.png"></a>
+                <a class="navbar-brand" href="index.php"><img src="images/cmwtrlparts.png"></a>
                 <button class="navbar-toggler mr-4" type="button" data-toggle="collapse" data-target="#subMenu" aria-controls="subMenu" aria-expanded="false" aria-label="Toggle Navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse align-self-end" id="subMenu">
                     <ul class="navbar-nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link" href="about.html" style="color:#212121;">ABOUT</a>
+                            <a class="nav-link" href="about.php" style="color:#212121;">ABOUT</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="contact.html" style="color:#212121">CONTACT</a>
+                            <a class="nav-link" href="contact.php" style="color:#212121">CONTACT</a>
                         </li>
                         <li class="nav-item dropdown active">
                             <a class="nav-link dropdown-toggle" href="#" id="prodDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#212121">PRODUCTS</a>
@@ -149,14 +149,13 @@ $prods = $getProds->fetchALl(PDO::FETCH_ASSOC);
                 <div class="headerPhone align-self-end center mr-5">
                     <h6 class="align-self-end">Call Now: <a href="tel:7179384603">(717)-938-4603</a></h6>
                 </div><!-- end headerPhone -->
-                
+                <div class="align-self-end justify-content-end cartWrap text-right" id="cartWrap">
+                <a href="cart.php" class="clearLink justify-content-end text-right">
+                    <span id="cartIconSpan"><img class="cartIcon" src="images/cart.png" id="cartIcon"></span>
+                    <span class="cartCount" id="cartCount">CART <span class="circle">( <?php echo $_SESSION['cartCount']; ?> )</span></span>
+                </a>
+            </div><!-- end cartIcon -->
             </div><!-- end container -->
-            <div class="align-self-end justify-content-end cartWrap text-right" id="cartWrap">
-                    <a href="cart.php" class="clearLink justify-content-end text-right">
-                        <span id="cartIconSpan"><img class="cartIcon" src="images/cart.png" id="cartIcon"></span>
-                        <span class="cartCount" id="cartCount">CART <span class="circle">( <?php echo $_SESSION['cartCount']; ?> )</span></span>
-                    </a>
-                </div><!-- end cartIcon -->
         </nav> <!-- end nav section -->
         
         <!-- create the bar beneath the nav and the search bar -->
