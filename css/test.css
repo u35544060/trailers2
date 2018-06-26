@@ -6,8 +6,6 @@
 
 h2 {
     color: #4e5a60;
-    margin: 0;
-    padding: 0;
 }
 
 .itemSku {
@@ -74,22 +72,10 @@ label {
     text-align: center;
     margin-bottom: 0;
     padding: .5rem;
-    text-transform: uppercase;
 }
 
 .largeMarg {
-    margin-top: 5%;
-}
-
-.tooltip-inner {
-    background-color: #f26722;
-    font-weight:  600;
-    font-family: 'Montserrat', sans-serif;
-    text-transform: uppercase;
-}
-
-.tt + .tooltip > .arrow {
-    border-bottom-color: #f26722;
+    margin-top: 10%;
 }
 
 .form-control:focus {
@@ -100,24 +86,6 @@ label {
 .brdBottom {
     padding-bottom: 20px !important;
     border-bottom:solid 1px #d9dde0;
-    margin-bottom: 20px !important;
-}
-
-.btnUpdate {
-    text-transform: uppercase;
-    border-radius: 0;
-}
-
-.btnUpdate:hover {
-    color: white;
-}
-
-.chnColor {
-    color: white;
-    background-color: #4e5a60;
-    box-shadow: 0 0 5px #4e5a60;
-    text-transform: uppercase;
-    font-weight:  600;
 }
 
 #footer {

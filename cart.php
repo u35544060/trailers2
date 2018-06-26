@@ -7,6 +7,29 @@ require 'scripts/php/dbConnect.php';
 //start session to store cart items array
 session_start();
 
+//if quantiy is changed make the changes to the proper session array element
+if (isset($_POST['qty'])) {
+    $qty = $_POST['qty'];
+    $arrayID = (int)$_POST['arrayID'];
+    $_SESSION['cartItems'][$arrayID]['quantity'] = $qty;
+}
+
+//if an item is removed from the cart remove it from session array and reindex the array
+if (isset($_GET['remove'])) {
+    $index = (int)$_GET['arrayID'];
+    unset($_SESSION['cartItems'][$index]);
+    $_SESSION['cartItems'] = array_values($_SESSION['cartItems']);
+    $_SESSION['cartCount'] = count($_SESSION['cartItems']);
+    header("Location: cart.php");
+}
+
+//if user clears cart unset the session variable
+if (isset($_GET['reset'])) {
+    unset($_SESSION['cartItems']);
+    $_SESSION['cartCount'] = count($_SESSION['cartItems']);
+    header("Location: cart.php");
+}
+
 //if the session variable cartCount is not set, set it to 0
 if(!isset($_SESSION['cartCount'])) {
     $_SESSION['cartCount'] = 0;
@@ -14,19 +37,22 @@ if(!isset($_SESSION['cartCount'])) {
 
 ?>
 
+
+
 <html lang="en">
 
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">          
-        <title>Home - Commonwealth Trailer Parts</title>
+        <title>Cart - Commonwealth Trailer Parts</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js" integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -80,69 +106,92 @@ if(!isset($_SESSION['cartCount'])) {
         
         </div><!-- end filler -->
         
-        <!-- create the main content for the page here -->
-        <!-- create the cart -->
+        <!-- create the main content for the page here -->        
+        <!-- begin the cart section -->
         <div class="container-fluid">
             <div class="row">
-                <div class="col-8 offset-2 brdOrange mt-4 mb-5 align-middle">
-                    <div class="row">
-                        <div class="col-12">
-                        <h2>MY CART</h2>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- end row -->
-        </div><!-- end container-fluid -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-8 offset-2">
-                    <div class="row">
-                        <div class="cartWrapper">
-                            <ul class="cartWrap">
-                                <?php 
-                                    if($_SESSION['cartCount'] < 1) {
-                                        echo '<h3>YOUR CART IS EMPTY.</h3>';
-                                    } else {
-                                        foreach($_SESSION['cartItems'] as $item) {
-                                            $prodID = $item['id'];
-                                            $getProdInfoSQL = "SELECT * FROM products WHERE id = :id";
-                                            $getProdInfo = $con->prepare($getProdInfoSQL);
-                                            $getProdInfo->bindParam(':id', $prodID);
-                                            $getProdInfo->execute();
-
-                                            $prodInfo = $getProdInfo->fetch(PDO::FETCH_ASSOC);
-
-                                            if (empty($prodInfo['pic'])) {
-                                                $picLoc = 'images/unavailable.png';
-                                            } else {
-                                                $picLoc = 'images/thumbs/' . $prodInfo['pic'];
-                                            }
-
-                                            echo '<li class="items">';
-                                            echo '<div class="infoWrap">';
-                                            echo '<div class="cartSection">';
-                                            echo '<img src="' . $picLoc . '" class="itemImg">';
-                                            echo '<p class="itemSku">' . $prodInfo['sku'] . '</p>';
-                                            echo '<h5>' . $prodInfo['description'] . '</h5>';
-                                            echo '<p><input type="text" class="qty mt-3" value="' . $item['quantity'] . '"> QUANTITY</p>';
-                                            if($prodInfo['inventory'] > 1) {
-                                                echo '<p class="stockStatus">IN STOCK</p>';
-                                            }
-                                            echo '</div>';
-                                            echo '<div class="cartSection removeWrap"><a href="#" class="remove">X</a></div>';
-                                            echo '</div>';
-                                            echo '</li>';
-
-                                        }
-                                    }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="col-8 offset-2 text-right p-0">
+                    <a href="products.php" class="btn btnUpdate mt-3" role="button">continue shopping</a>
                 </div>
             </div>
-        </div>
-        <!-- end cart -->
+            <!-- cart header -->
+            <div class="row">
+                <div class="col-8 offset-2 brdOrange mt-3 mb-3">
+                <h2>MY CART</h2>
+                </div>
+            </div><!-- end row-->
+            <!-- end cart header -->
+            
+            <!-- begin cart items -->
+            <div class="row">
+                <div class="col-8 offset-2 p-0">
+                    <?php
+                        if($_SESSION['cartCount'] < 1) {
+                            echo '<h5 class="text-center">Your shopping cart is empty. Please add some products and come back when you are finished.</h5>';
+                        } else {
+                            $count = 0;
+                            foreach($_SESSION['cartItems'] as $item) {
+                                $prodID = $item['id'];
+                                $getProdInfoSQL = "SELECT * FROM products WHERE id = :id";
+                                $getProdInfo = $con->prepare($getProdInfoSQL);
+                                $getProdInfo->bindParam(':id', $prodID);
+                                $getProdInfo->execute();
+
+                                $prodInfo = $getProdInfo->fetch(PDO::FETCH_ASSOC);
+
+                                if (empty($prodInfo['pic'])) {
+                                    $picLoc = 'images/unavailable.png';
+                                } else {
+                                    $picLoc = 'images/thumbs/' . $prodInfo['pic'];
+                                }
+                                
+                                echo '<div class="row p-0 m-0 brdBottom">';
+                                echo '<div class="col-md-3 p-0">';
+                                echo '<img src="' . $picLoc . '" alt="NO IMAGE FOUND"/>';
+                                if($prodInfo['inventory'] > 1) {
+                                    echo '<p class="inStock">in stock</p>';
+                                }
+                                echo '</div>'; //end image wrapper
+                                echo '<div class="col-md-9 p-0">';
+                                echo '<div class="align-middle largeMarg mb-3">';
+                                echo '<p class="itemSku mt-2">' . $item['sku'] . '</p>';
+                                echo '<h5>' . $item['description'] . '</h5>';
+                                echo '<form class="form-inline mt-1" name="frmUpdate" method="POST" action="cart.php">';
+                                echo '<div class="row m-0 p-0">';
+                                echo '<label for="qty" class="col-form-label mr-2">QUANTITY</label>';
+                                echo '<input class="form-control qty" type="number" name="qty" value="' . $item['quantity'] . '">';
+                                echo '<input type="hidden" name="arrayID" value="' . $count . '">';
+                                echo '<input class="btn btn-link btnLink" type="submit" value="UPDATE">';
+                                echo '<span class="remove"><a class="tt" href="cart.php?remove=true&arrayID=' . $count . '"><span class="fa fa-trash" aria-hidden="true"></span></a></span>';
+                                echo '</div>'; //end quantity wrapper
+                                echo '</form>';
+                                echo '</div>'; //end description wrapper 
+                                echo '</div>'; // end col-md-9 wrapper
+                                echo '</div>'; // end row
+                                
+                                $count += 1;
+                            }//end foreach
+                            
+                            echo '<div class="row">';
+                            echo '<div class="col-12 text-right">';
+                            echo '<a href="cart.php?reset=true" class="btn btnUpdate chnColor" role="button">CLEAR CART</a>';
+                            echo '<a href="products.php" class="btn btnUpdate bl-1" role="button">proceed</a>';
+                            echo '</div>';
+                            echo '</div>';
+                        }//end if/else statement
+                    ?>
+                </div>
+            </div>
+            
+        </div><!-- end container-fluid-->
+        <!-- end cart section -->
+        
+        <script type="text/javascript">
+            $('.tt').tooltip({
+                title: "Remove Product",
+                placement: 'top'
+            });
+        </script>
         
         <div id="footer">
             <div class="container-fluid">
