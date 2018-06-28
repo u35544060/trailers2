@@ -159,6 +159,10 @@ body {
     color: black !important;
 }
 
+.uppercase {
+    text-transform: uppercase;
+}
+
 #footer {
    background-color: #4d5a60;
     padding-top: 30px;

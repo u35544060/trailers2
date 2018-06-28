@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 
+<?php
+require 'scripts/php/dbConnect.php';
+
+//start session to store cart items array
+session_start();
+
+//if the session variable cartCount is not set, set it to 0
+if(!isset($_SESSION['cartCount'])) {
+    $_SESSION['cartCount'] = 0;
+}
+
+//if the cart is empty get out of here
+if(!isset($_SESSION['cartItems'])) {
+    echo '<script type="text/javascript">alert("You need products in your cart to checkout. Please add something to your cart before proceeding.");
+    window.location.replace("products.php");
+    </script>';
+}
+
+?>
+
 <html lang="en">
 
     <head>
@@ -19,6 +39,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/checkOut.css">
     </head>
     <body>
         <!-- create the naviagation for the page -->
@@ -67,7 +88,73 @@
         </div><!-- end filler -->
         
         <!-- create the main content for the page here -->
-    
+        <!-- create the checkout form -->
+        <div class="container-fluid">
+            <div class="row mt-3 mb-5">
+                <div class="col-sm-10 offset-sm-1">
+                    <form>
+                        <div class="row">
+                            <div class="col-7 col-md-9">
+                                <form>
+                                    <div class="form-group">
+                                        <label class="inLabels" for="name">full name</label>
+                                        <input type="text" class="form-control" id="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="inLabels" for="email">email</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="inLabels" for="phone">phone number</label>
+                                        <input type="phone" class="form-control" id="phone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>preferred contact method</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="email" id="radEmail" value="email">
+                                            <label class="form-check-label radLbl" for="radEmail">email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="phone" id="radPhone" value="phone">
+                                            <label class="form-check-label radLbl" for="radPhone">phone</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-5 col-md-3 smCWrap">
+                                <ul id="smallCart">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h5 class="text-center mt-3">your cart</h5>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    foreach($_SESSION['cartItems'] as $item) {
+                                        echo '<li class="smCart">';
+                                        echo '<div class="itemWrap">';
+                                        echo '<div class="row mb-0">';
+                                        echo '<div class="col-12 m-0 p-0">';
+                                        echo '<p class="float-left ml-2 mt-0 mb-0 p-0 smP">' . $item['sku'] . '</p>';
+                                        echo '<p class="float-right mt-0 mb-0 p-0 mr-2">x' . $item['quantity'] . '</p>';
+                                        echo '</div>';
+                                        echo '</div>';
+                                        echo '<div class="row mt-0 mb-0">';
+                                        echo '<p class="float-left ml-2 boldIt">' . $item['description'] . '</p>';
+                                        echo '</div>';
+                                        echo '</div>';
+                                        echo '</li>';
+                                    }
+                                    
+                                    echo '<button class="btn btnUpdate align-self-end" name="btnCheckOut" value="GET QUOTE">GET QUOTE</button>';
+                                ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><!-- end container-fluid -->
+        <!-- end checkout form -->
         
         <div id="footer">
             <div class="container-fluid">

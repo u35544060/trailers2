@@ -31,7 +31,8 @@ if(isset($_POST['sku'])) {
         
     //if the product is already in the array do nothing, if it isn't add it to the session array also adjust count in cart
     if(in_array($newProd, $_SESSION['cartItems'])) {
-        $_SESSION['cartItems'] = $_SESSION['cartItems'];
+        echo '<script type="text/javascript">alert("The product is already in your cart. You can adjust quanties for a product in the there.");
+        </script>';
     } else {
         array_push($_SESSION['cartItems'], $newProd);
         $_SESSION['cartCount'] = count($_SESSION['cartItems']);

@@ -175,7 +175,7 @@ if(!isset($_SESSION['cartCount'])) {
                             echo '<div class="row">';
                             echo '<div class="col-12 text-right">';
                             echo '<a href="cart.php?reset=true" class="btn btnUpdate chnColor" role="button">CLEAR CART</a>';
-                            echo '<a href="products.php" class="btn btnUpdate bl-1" role="button">proceed</a>';
+                            echo '<a href="checkout.php" class="btn btnUpdate bl-1" role="button">proceed</a>';
                             echo '</div>';
                             echo '</div>';
                         }//end if/else statement

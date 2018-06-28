@@ -1,0 +1,52 @@
+label {
+    text-align: left !important;
+    width: 90%;
+    font-weight: 700;
+    text-transform:  uppercase;
+    margin: 0;
+    padding: 0;
+}
+
+small {
+    font-weight:  600 !important;
+    text-transform: uppercase;
+}
+
+.radLbl  {
+    font-size: .75rem;
+}
+
+h5 {
+    color: #4e5a60;
+    text-transform: uppercase;
+}
+
+#smallCart {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    color: #4e5a60;
+}
+
+.smCart {
+    margin: 0;
+    padding: 0;
+}
+
+.smP {
+    font-size: .75rem;
+    margin: 0;
+    padding: 0;
+}
+
+.smCWrap {
+    border:solid 1px #f26722;
+    box-shadow:  0 0 .5rem #f26722;
+}
+
+.boldIt {
+    font-weight:  500;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    border-bottom: solid 1px #d9dde0;
+}
