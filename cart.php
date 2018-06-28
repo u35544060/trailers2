@@ -7,6 +7,10 @@ require 'scripts/php/dbConnect.php';
 //start session to store cart items array
 session_start();
 
+if(!isset($_SESSION['cartItems'])) {
+    $_SESSION['cartItems'] = array();
+}
+
 //if quantiy is changed make the changes to the proper session array element
 if (isset($_POST['qty'])) {
     $qty = $_POST['qty'];
